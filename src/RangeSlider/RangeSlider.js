@@ -1,18 +1,23 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 const propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
   step: PropTypes.number,
   value: PropTypes.number,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+  title: PropTypes.string,
+  unit: PropTypes.string
 };
 
 const defaultProps = {
   min: 0,
   max: 100,
   step: 1,
-  value: 0
+  value: 1,
+  title: '',
+  unit: ''
 };
 
 class RangeSlider extends Component {
@@ -25,11 +30,8 @@ class RangeSlider extends Component {
 
     this.state = {
       track: 0,
-      thumb: 0,
-      value: this.props.value
+      thumb: 0
     };
-
-    this.value = this.props.value;
   }
 
   componentDidMount() {
@@ -57,12 +59,13 @@ class RangeSlider extends Component {
   }
 
   handleMove(e) {
+    const { onChange } = this.props;
     this.stopPropagation(e);
 
     const position = this.position(e);
     const value = this.getValue(position);
 
-    this.setState({value});
+    onChange(value);
   }
 
   handleEnd() {
@@ -80,12 +83,19 @@ class RangeSlider extends Component {
     return position;
   }
 
+  step(ratio) {
+    const { min, max, step } = this.props;
+
+    return step * Math.round(ratio * (max - min) / step);
+  }
+
   getValue(position) {
     const { min, max } = this.props;
     const { track } = this.state;
 
-    const ratio = max / track;
-    const value = Math.round(ratio * position);
+    const ratio = position / track;
+    const step = this.step(ratio);
+    const value = Math.round(step + min);
 
     if (value < min) return min;
     if (value > max) return max;
@@ -94,17 +104,17 @@ class RangeSlider extends Component {
   }
 
   getPosition(value) {
-    const { max } = this.props;
+    const { min, max } = this.props;
     const { track } = this.state;
 
-    const ratio = value / max;
+    const ratio = (value - min) / (max - min);
     const position = Math.round(ratio * track);
 
     return position;
   }
 
   render() {
-    const position = this.getPosition(this.state.value);
+    const position = this.getPosition(this.props.value);
 
     const styleThumb = {
       left: position + 'px'
@@ -115,8 +125,16 @@ class RangeSlider extends Component {
     };
 
     return (
-      <div>
-        <div className='range-slider'
+      <div className="range-slider">
+        <h6 className="range-slider-header">
+          <span className="range-slider-header__title">
+            { this.props.title }
+          </span>
+          <span className="range-slider-header__value">
+            { `${this.props.value}${this.props.unit}` }
+          </span>
+        </h6>
+        <div className='range-slider__track'
             ref={ node => this.track = node }>
           <div className='range-slider__fill'
               style={ styleFill }
@@ -128,7 +146,6 @@ class RangeSlider extends Component {
             onMouseUp={ this.handleEnd }
           />
         </div>
-        {'Position ' + position + 'Value' + this.state.value}
       </div>
     );
   }
