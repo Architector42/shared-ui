@@ -11,9 +11,8 @@ class App extends React.Component {
 
   render() {
     return (
-      <div>
+      <div style={ {width: '200px', margin: '50px'} }>
         <RangeSlider />
-        <h1 style={ {color: 'red'} }> Test 3 </h1>
       </div>
     );
   }
