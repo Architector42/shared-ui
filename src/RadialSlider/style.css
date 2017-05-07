@@ -1,19 +1,47 @@
 .radial-slider {
-  display: inline-block;
+  position: relative;
   text-align: center;
+}
+
+.radial-slider__title {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 8px;
+  font-family: sans-serif;
+  text-align: left;
+}
+
+.radial-slider__container {
+  display: inline-block;
+  position: relative;
 }
 
 .radial-slider__arc {
   fill: none;
   stroke-width: 2;
-  stroke: #eeeeee;
+  stroke: #eee;
 }
 
 .radial-slider__fill {
   fill: none;
   stroke-width: 2;
+  stroke: #4093CA;
 }
 
 .radial-slider__thumb {
-  fill: blue;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.26);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.thumb {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background-color: blue;
+  border-radius: 50%;
 }

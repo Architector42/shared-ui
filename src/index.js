@@ -41,8 +41,9 @@ class Circle extends React.Component {
   render() {
     return (
       <RadialSlider
+        title='Angle'
         min={ 0 }
-        max={ 100 }
+        max={ 360 }
         value={ this.state.value }
         onChange={ ::this.handleChange }
       />
@@ -60,6 +61,7 @@ class App extends React.Component {
     return (
       <div style={ {width: '200px', margin: '50px'} }>
         <Slider />
+        <br />
         <br />
         <Circle />
       </div>

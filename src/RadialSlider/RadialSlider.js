@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 const propTypes = {
   radius: PropTypes.number,
+  thumbRadius: PropTypes.number,
+  title: PropTypes.string,
   min: PropTypes.number,
   max: PropTypes.number,
   step: PropTypes.number,
@@ -12,6 +14,7 @@ const propTypes = {
 
 const defaultProps = {
   radius: 60,
+  thumbRadius: 8,
   min: 0,
   max: 100,
   step: 1,
@@ -28,7 +31,6 @@ class RadialSlider extends Component {
     this.handleEnd = ::this.handleEnd;
 
     this.state = {
-      slider: null,
       arc: null,
       fill: null,
       thumb: null
@@ -36,13 +38,11 @@ class RadialSlider extends Component {
   }
 
   componentDidMount() {
-    const slider = this.slider;
     const arc = this.arc;
     const fill = this.fill;
     const thumb = this.thumb;
 
     this.setState({
-      slider,
       arc,
       fill,
       thumb
@@ -63,14 +63,30 @@ class RadialSlider extends Component {
 
   getCircleCenter() {
     const { radius } = this.props;
-    const { slider } = this.state;
+    const { arc } = this.state;
 
-    const direction = slider.getBoundingClientRect();
+    const direction = arc.getBoundingClientRect();
 
     return {
       x: direction.left + radius,
       y: direction.top + radius
     };
+  }
+
+  getCircleLenth() {
+    const { fill } = this.state;
+
+    if (!fill) return 0;
+
+    const length = fill.getTotalLength();
+    return length;
+  }
+
+  getCircleFill(length, angle) {
+    const ratio = length / 360;
+    const fill = length - ratio * angle;
+
+    return fill;
   }
 
   step(ratio) {
@@ -103,10 +119,7 @@ class RadialSlider extends Component {
   }
 
   position(e) {
-    const { radius } = this.props;
-    const { thumb } = this.state;
-
-    const thumbRadius = thumb.r.baseVal.value;
+    const { radius, thumbRadius } = this.props;
 
     const point = this.getPoint(e);
     const circleCenter = this.getCircleCenter();
@@ -124,10 +137,7 @@ class RadialSlider extends Component {
   }
 
   getAngleToPosition(position) {
-    const { radius } = this.props;
-    const { thumb } = this.state;
-
-    const thumbRadius = thumb.r.baseVal.value;
+    const { radius, thumbRadius } = this.props;
 
     const x = position.x - radius + thumbRadius;
     const y = position.y - radius + thumbRadius;
@@ -168,48 +178,67 @@ class RadialSlider extends Component {
   }
 
   render() {
-    const { value } = this.props;
+    const { radius, thumbRadius, value } = this.props;
 
     const angle = this.getAngleToValue(value);
     const position = this.getPositionToAngle(angle);
 
+    const canvasSize = (radius + thumbRadius) * 2;
+    const length = this.getCircleLenth();
+    const fill = this.getCircleFill(length, angle);
+
+    const textCenter = radius + thumbRadius + 1;
+
     return (
-      <div className="radial-slider"
-        ref={ node => this.slider = node }
-      >
-
-        <svg
-          width={ 138 }
-          height={ 138 }
-        >
-          <circle
-            ref={ node => this.arc = node }
-            className='radial-slider__arc'
-            cx={ 68 }
-            cy={ 68 }
-            r={ 60 }
-
-
-          />
-          <circle
-            ref={ node => this.fill = node }
-            className='radial-slider__arc'
-            cx={ 68 }
-            cy={ 68 }
-            r={ 60 }
-            strokeDasharray={ 600 }
-            strokeDashoffset={ 600 }
-          />
-          <circle
-            ref={ node => this.thumb = node }
+      <div className='radial-slider'>
+        <h6 className='radial-slider__title'>
+          { this.props.title }
+        </h6>
+        <div className='radial-slider__container'>
+          <svg
+            width={ canvasSize }
+            height={ canvasSize }
+          >
+            <text
+              x={ textCenter }
+              y={ textCenter }
+              textAnchor='middle'
+              fontFamily='Verdana'
+              fontSize='18'
+            >
+              {value}
+            </text>
+            <circle
+              ref={ node => this.arc = node }
+              className='radial-slider__arc'
+              cx={ radius + thumbRadius }
+              cy={ radius + thumbRadius }
+              r={ radius }
+            />
+            <circle
+              ref={ node => this.fill = node }
+              className='radial-slider__fill'
+              cx={ radius + thumbRadius }
+              cy={ radius + thumbRadius }
+              r={ radius }
+              strokeDasharray={ length }
+              strokeDashoffset={ fill }
+              transform={
+                `rotate(-90 ${radius + thumbRadius} ${radius + thumbRadius})`
+              }
+            />
+          </svg>
+          <div
             className='radial-slider__thumb'
-            cx={ position.x + 8 }
-            cy={ position.y + 8 }
-            r={ 8 }
+            ref={ node => this.thumb = node }
+            style={ {
+              left: position.x  + 'px',
+              top: position.y  + 'px'
+            } }
             onMouseDown={ this.handleStart }
             onMouseUp={ this.handleEnd }
           />
-        </svg>
+        </div>
       </div>
     );
   }

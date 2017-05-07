@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
 const propTypes = {
+  title: PropTypes.string,
+  unit: PropTypes.string,
   min: PropTypes.number,
   max: PropTypes.number,
   step: PropTypes.number,
   value: PropTypes.number,
-  onChange: PropTypes.func,
-  title: PropTypes.string,
-  unit: PropTypes.string
+  onChange: PropTypes.func
 };
 
 const defaultProps = {
