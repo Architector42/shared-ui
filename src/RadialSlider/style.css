@@ -1,0 +1,19 @@
+.radial-slider {
+  display: inline-block;
+  text-align: center;
+}
+
+.radial-slider__arc {
+  fill: none;
+  stroke-width: 2;
+  stroke: #eeeeee;
+}
+
+.radial-slider__fill {
+  fill: none;
+  stroke-width: 2;
+}
+
+.radial-slider__thumb {
+  fill: blue;
+}

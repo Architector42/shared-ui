@@ -1,4 +1,4 @@
-import RangeSlider from './RangeSlider.js';
+import RangeSlider from './RangeSlider';
 import './style.css';
 
 export default RangeSlider;
