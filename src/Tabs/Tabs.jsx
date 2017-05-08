@@ -15,22 +15,64 @@ class Tabs extends Component {
     super(props);
     
     this.state = {
-      active: this.props.active
+      active: this.props.active,
+      width: []
     };
   }
 
-  handleClick(index) {
+  componentDidMount() {
+    const list = this.list;
+
+    this.getWidth(list);
+  }
+
+  noneSpread(e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
+  handleClick(index, e) {
+    this.noneSpread(e);
     this.setState({ active: index });
+    this.getPositionLine();
+  }
+
+  getWidth(list) {
+    const arr = [];
+
+    [].map.call(list.children, li => {
+      arr.push(li.clientWidth);
+    });
+
+    this.setState({ width: arr });
+  }
+
+  getPositionLine() {
+    const { active, width } = this.state;
+    let position = 0;
+
+    for (var i = 0; i < active; i++) {
+      position += width[i];
+    }
+
+    return {
+      position: position, 
+      width: width[active]
+    };
   }
 
   render() {
     const { children } = this.props;
 
-    console.log(this.state.active);
+    const line = this.getPositionLine();
+    const lineStyle = {
+      transform: `translate(${line.position}px)`,
+      width: `${line.width}px`
+    };
 
     return (
       <div className='tabs'>
-        <ul className='tabs-links'>
+        <ul className='tabs-links' ref={ node => this.list = node }>
           { 
             children.map((item, index) =>
               <li 
@@ -43,6 +85,7 @@ class Tabs extends Component {
             )
           }
         </ul>
+        <div className='tabs__line' style={ lineStyle }/>
         { this.props.children[this.state.active] }
       </div>
     );

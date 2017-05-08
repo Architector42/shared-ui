@@ -1,16 +1,20 @@
 .tabs {
-
+  
 }
 
 .tabs-links {
+  margin: 0;
+  padding: 0;
   list-style: none;
+  border-bottom: 1px solid #ddd;
 }
 
 .tabs-links__link {
   margin: 0;
   padding: 10px 15px;
   float: left;
-  border: 1px solid #ddd;
+  font-family: sans-serif;
+  cursor: pointer;
 }
 
 .tabs-links::before,
@@ -21,4 +25,16 @@
 
 .tabs-links::after {
   clear: both;
+}
+
+.tabs__line {
+  margin-top: -2px;
+  height: 2px;
+  background-color: #4093CA;
+  transition-duration: .3s;
+  transition-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+}
+
+.tabs__content {
+  padding: 20px;
 }

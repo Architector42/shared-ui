@@ -47,7 +47,7 @@ class RangeSlider extends Component {
     });
   }
 
-  stopPropagation(e) {
+  noneSpread(e) {
     e.stopPropagation();
     e.preventDefault();
   }
@@ -58,9 +58,10 @@ class RangeSlider extends Component {
     document.addEventListener('mouseup', this.handleEnd);
   }
 
-  handleMove(e) {
+  handleMove(e) {    
     const { onChange } = this.props;
-    this.stopPropagation(e);
+
+    this.noneSpread(e);
 
     const position = this.position(e);
     const value = this.getValue(position);

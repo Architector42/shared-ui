@@ -49,7 +49,7 @@ class RadialSlider extends Component {
     });
   }
 
-  stopPropagation(e) {
+  noneSpread(e) {
     e.stopPropagation();
     e.preventDefault();
   }
@@ -76,7 +76,9 @@ class RadialSlider extends Component {
   getCircleLenth() {
     const { fill } = this.state;
 
-    if (!fill) return 0;
+    if (!fill) {
+      return 0;
+    }
 
     const length = fill.getTotalLength();
     return length;
@@ -87,6 +89,16 @@ class RadialSlider extends Component {
     const fill = length - ratio * angle;
 
     return fill;
+  }
+
+  scale(dx, dy) {
+    const { radius } = this.props;
+
+    if (dx === 0 && dy === 0) {
+      return radius;
+    }
+
+    return radius / Math.sqrt(dx*dx + dy*dy);
   }
 
   step(ratio) {
@@ -104,7 +116,7 @@ class RadialSlider extends Component {
   handleMove(e) {
     const { onChange } = this.props;
 
-    this.stopPropagation(e);
+    this.noneSpread(e);
 
     const position = this.position(e);
     const angle = this.getAngleToPosition(position);
@@ -125,7 +137,7 @@ class RadialSlider extends Component {
     const circleCenter = this.getCircleCenter();
     const dx = point.x - circleCenter.x;
     const dy = point.y - circleCenter.y;
-    const scale = radius / Math.sqrt(dx*dx + dy*dy);
+    const scale = this.scale(dx, dy);
 
     const x = Math.round(dx * scale + radius) - thumbRadius;
     const y = Math.round(dy * scale + radius) - thumbRadius;

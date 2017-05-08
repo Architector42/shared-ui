@@ -12,13 +12,7 @@ class Slider extends React.Component {
     this.state = {value: 10};
   }
 
-  stopPropagation(e) {
-    e.stopPropagation();
-    e.preventDefault();
-  }
-
-  handleChange(value, e) {
-    this.stopPropagation(e);
+  handleChange(value) {
     this.setState({value});
   }
 
@@ -84,7 +78,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div style={ {width: '300px', margin: '50px'} }>
+      <div style={ {width: '250px', margin: '50px'} }>
         <Slider />
         <br />
         <br />
