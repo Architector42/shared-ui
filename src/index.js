@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 
 import RangeSlider from './RangeSlider';
 import RadialSlider from './RadialSlider';
+import Tabs, { Item } from './Tabs';
 
 class Slider extends React.Component {
   constructor(props) {
@@ -11,7 +12,13 @@ class Slider extends React.Component {
     this.state = {value: 10};
   }
 
-  handleChange(value) {
+  stopPropagation(e) {
+    e.stopPropagation();
+    e.preventDefault();
+  }
+
+  handleChange(value, e) {
+    this.stopPropagation(e);
     this.setState({value});
   }
 
@@ -51,6 +58,24 @@ class Circle extends React.Component {
   }
 }
 
+class Tab extends React.Component {
+  render() {
+    return (
+      <Tabs>
+        <Item title='normal'>
+          normal
+        </Item>
+        <Item title=':hover'>
+          :hover
+        </Item>
+        <Item title=':active'>
+          :active
+        </Item>
+      </Tabs>
+    );
+  }
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -59,11 +84,13 @@ class App extends React.Component {
 
   render() {
     return (
-      <div style={ {width: '200px', margin: '50px'} }>
+      <div style={ {width: '300px', margin: '50px'} }>
         <Slider />
         <br />
         <br />
         <Circle />
+        <br/>
+        <Tab />
       </div>
     );
   }
