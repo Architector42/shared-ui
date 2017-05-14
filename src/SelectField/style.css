@@ -1,0 +1,21 @@
+.select-field__active {
+  padding: 5px 7px;
+  border: 1px solid #4093CA;
+  border-radius: 3px;
+}
+
+.select-field-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: #ddd;
+}
+
+.select-field-list__item {
+  margin: 0;
+  padding: 5px 10px;
+}
+
+.select-field-list__item:hover {
+  background-color: #fff;
+}
