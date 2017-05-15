@@ -88,6 +88,9 @@ class Select extends React.Component {
         <Option> Chrome </Option>
         <Option> Mozila </Option>
         <Option> Opera </Option>
+        <Option> Safari </Option>
+        <Option> IE </Option>
+        <Option> TOR </Option>
       </SelectField>
     );
   }
